@@ -80,14 +80,16 @@ Look for 660400010 (Rule2):
 
 6604000103 Battery Low
 
+## Add rules
+```
+Rule1 ON TuyaReceived#Data$|6501000101 DO publish2 %topic%/stat/STATUS ON ENDON ON TuyaReceived#Data$|6501000100 DO publish2 %topic%/stat/STATUS OFF ENDON
 
-#### Rule1 ON TuyaReceived#Data$|6501000101 DO publish2 stat/%topic%/STATUS ON ENDON ON TuyaReceived#Data$|6501000100 DO publish2 stat/%topic%/STATUS OFF ENDON
+Rule2 ON TuyaReceived#Data$|6604000100 DO publish2 %topic%/stat/BATT Full ENDON ON TuyaReceived#Data$|6604000101 DO publish2 %topic%/stat/BATT High ENDON ON TuyaReceived#Data$|6604000102 DO publish2 %topic%/stat/BATT Medium ENDON ON TuyaReceived#Data$|6604000103 DO publish2 %topic%/stat/BATT Low ENDON
 
-#### Rule2 ON TuyaReceived#Data$|6604000100 DO publish2 stat/%topic%/BATT Full ON TuyaReceived#Data$|6604000101 DO publish2 stat/%topic%/BATT High ENDON ON TuyaReceived#Data$|6604000102 DO publish2 stat/%topic%/BATT Medium ENDON ON TuyaReceived#Data$|6604000103 DO publish2 stat/%topic%/BATT Low ENDON
 
-The next rule creates a device in Home Assistant. Change 'Water Leak' name with whatever name you want. If you have more than one sensor make sure you have different names for each sensor:
+Rule3 ON system#boot DO publish2 homeassistant/binary_sensor/%macaddr%moisture/config {"name":"Water Leak","unique_id":"%topic%%macaddr%","device_class":"moisture","device":{"identifiers":["%macaddr%"],"name":"Water Leak","manufacturer":"Tasmota","model":"SKU-S2502"},"state_topic":"%topic%/stat/STATUS"} ENDON ON system#boot DO publish2 homeassistant/sensor/%macaddr%_battery/config {"name":"Water Leak Battery","unique_id":"%topic%Battery%macaddr%","icon":"hass:battery","device":{"identifiers":["%macaddr%"],"name":"Water Leak","manufacturer":"Tasmota","model":"SKU-S2502"},"state_topic":"%topic%/stat/BATT"} ENDON
 
-#### Rule3 ON system#boot DO publish2 homeassistant/binary_sensor/%macaddr%_moisture/config {"name":"Water Leak","unique_id":"%topic%_%macaddr%","device_class":"moisture","device":{"identifiers":["%macaddr%"],"name":"Water Leak","manufacturer":"Tasmota","model":"SKU-S2502"},"state_topic":"%topic%/stat/STATUS"} ENDON ON system#boot DO publish2 homeassistant/sensor/%macaddr%_battery/config {"name":"Water Leak Battery","unique_id":"%topic%_Battery_%macaddr%","icon":"hass:battery","device":{"identifiers":["%macaddr%"],"name":"Water Leak","manufacturer":"Tasmota","model":"SKU-S2502"},"state_topic":"%topic%/stat/BATT"} ENDON
+```
 
 Activate rules
 
